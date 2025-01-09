@@ -6,11 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "iniciar": "npm install && next build && next start"
   },
   "dependencies": {
+    "next": "15.1.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.1.4"
+    "react-icons": "^5.4.0",
+    "react-modal": "^3.16.3"
   }
 }
