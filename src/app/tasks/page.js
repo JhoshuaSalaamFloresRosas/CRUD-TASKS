@@ -34,7 +34,7 @@ export default function Tasks() {
     const response = await fetch("/api", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: newTask, description: newDescription, completed: false }),
+      body: JSON.stringify({ title: newTask, description: newDescription, status: false }),
     });
     const task = await response.json();
     setTasks([...tasks, task]);
@@ -57,7 +57,7 @@ export default function Tasks() {
         id: editingTask.id,
         title: newTask,
         description: newDescription,
-        completed: editingTask.completed,
+        status: editingTask.status,
         createdAt: editingTask.createdAt,
       }),
     });
@@ -83,7 +83,7 @@ export default function Tasks() {
   };
 
   const toggleTaskState = async (task) => {
-    const updatedTask = { ...task, completed: !task.completed };
+    const updatedTask = { ...task, status: !task.status };
     const response = await fetch("/api", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -93,7 +93,7 @@ export default function Tasks() {
     if (response.ok) {
       const data = await response.json();
       setTasks((prevTasks) =>
-        prevTasks.map((t) => (t.id === data.id ? { ...t, completed: data.completed } : t))
+        prevTasks.map((t) => (t.id === data.id ? { ...t, status: data.status } : t))
       );
     } else {
       console.error("Error al actualizar la tarea:", await response.text());
@@ -130,7 +130,7 @@ export default function Tasks() {
             placeholder="Nueva tarea"
             className="new-task-input"
           />
-          
+
           {errorMessage && <p className="error-message">{errorMessage}</p>}
 
           <textarea
@@ -139,7 +139,7 @@ export default function Tasks() {
             placeholder="Descripción de la tarea"
             className="new-task-description"
           />
-          
+
           {editingTask ? (
             <button onClick={updateTask} className="modify-button">
               <FaSave /> Modificar
@@ -147,14 +147,14 @@ export default function Tasks() {
           ) : (
             <button onClick={addTask} className="submit-button">Guardar</button>
           )}
-        
+
         </div>
       )}
 
       <div className="tasks-list">
         {tasks.map((task) => (
           <div
-            className={`task-card ${task.completed ? "completed" : "not-completed"}`}
+            className={`task-card ${task.status ? "completed" : "not-completed"}`}
             key={task.id}
           >
             <h2 className="task-title">{task.title}</h2>
@@ -162,12 +162,12 @@ export default function Tasks() {
             <p className="task-created-at">
               Creado el: {task.createdAt ? new Date(task.createdAt).toLocaleString("en-US", { dateStyle: 'short', timeStyle: 'short' }) : "Fecha no disponible"}
             </p>
-            <p className="task-status">Estado: {task.completed ? "Completada" : "No completada"}</p>
+            <p className="task-status">Estado: {task.status ? "Completada" : "No completada"}</p>
 
-            
+
             <div className="task-buttons-container">
               <button className="toggle-button" onClick={() => toggleTaskState(task)}>
-                <FaCheck /> {task.completed ? "Desmarcar" : "Completar"}
+                <FaCheck /> {task.status ? "Desmarcar" : "Completar"}
               </button>
               <button className="delete-button" onClick={() => deleteTask(task.id)}>
                 <FaTrash /> Eliminar
@@ -184,9 +184,9 @@ export default function Tasks() {
                 <FaEdit /> Actualizar
               </button>
             </div>
-          
-          
-          
+
+
+
           </div>
         ))}
       </div>

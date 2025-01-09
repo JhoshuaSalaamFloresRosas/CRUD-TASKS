@@ -61,7 +61,7 @@ export async function POST(req) {
 export async function PUT(req) {
   try {
     const body = await req.json();
-    const { id, title, description, completed } = body;
+    const { id, title, description, status } = body;
 
     if (!id) {
       return new Response(
@@ -74,7 +74,7 @@ export async function PUT(req) {
       id,
       title: title !== undefined ? title : "Sin título",
       description: description !== undefined ? description : null,
-      completed: completed !== undefined ? completed : false,
+      status: status !== undefined ? status : false,
       createdAt: body.createdAt || new Date().toISOString(),
     };
 
